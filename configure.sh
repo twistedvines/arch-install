@@ -53,7 +53,11 @@ configure_mirrors() {
 }
 
 set_root_password() {
-  password="$(head /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c16)"
+  if [ -n "$ROOT_PASSWORD" ]; then
+    local password="$ROOT_PASSWORD"
+  else
+    local password="$(head /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c16)"
+  fi
   echo "root:${password}" | run_in_chroot chpasswd
   echo "root password for new build is ${password}"
 }
@@ -102,6 +106,7 @@ configure_for_other_build() {
   set_hostname
   enable_dhcpcd
   configure_mirrors
+  set_root_password
 }
 
 # If we're building with packer
