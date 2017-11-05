@@ -107,6 +107,7 @@ configure_for_other_build() {
   enable_dhcpcd
   configure_mirrors
   set_root_password
+  create_nopasswd_group
 }
 
 # If we're building with packer
