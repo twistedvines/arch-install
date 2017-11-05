@@ -80,15 +80,33 @@ create_vagrant_user() {
   fi
 }
 
-gen_fstab
+configure_for_packer_build() {
+  gen_fstab
+  configure_timezone
+  configure_locales
+  configure_keyboard
+  set_hostname
+  enable_dhcpcd
+  enable_sshd
+  configure_mirrors
+  set_root_password
+  create_nopasswd_group
+  create_vagrant_user
+}
 
-configure_timezone
-configure_locales
-configure_keyboard
-set_hostname
-enable_dhcpcd
-enable_sshd
-configure_mirrors
-set_root_password
-create_nopasswd_group
-create_vagrant_user
+configure_for_other_build() {
+  gen_fstab
+  configure_timezone
+  configure_locales
+  configure_keyboard
+  set_hostname
+  enable_dhcpcd
+  configure_mirrors
+}
+
+# If we're building with packer
+if [ -n "$PACKER_BUILD_NAME" ]; then
+  configure_for_packer_build
+else
+  configure_for_other_build
+fi
