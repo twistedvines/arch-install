@@ -45,11 +45,11 @@ enable_sshd() {
 }
 
 configure_mirrors() {
-  mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.all
-  sed -i 's/^#Server/Server/g' /etc/pacman.d/mirrorlist.all
-  rankmirrors -n 3 /etc/pacman.d/mirrorlist.all > /etc/pacman.d/mirrorlist
+  mv /mnt/etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist.all
+  sed -i 's/^#Server/Server/g' /mnt/etc/pacman.d/mirrorlist.all
+  rankmirrors -n 3 /mnt/etc/pacman.d/mirrorlist.all > /mnt/etc/pacman.d/mirrorlist
   grep --no-group-separator -A1 'United Kingdom' \
-    /etc/pacman.d/mirrorlist.all >> /etc/pacman.d/mirrorlist
+    /mnt/etc/pacman.d/mirrorlist.all >> /mnt/etc/pacman.d/mirrorlist
 }
 
 set_root_password() {
