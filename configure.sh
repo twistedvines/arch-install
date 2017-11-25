@@ -19,9 +19,9 @@ configure_timezone() {
 
 configure_locales() {
   # generate locales
-  run_in_chroot echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen
-  run_in_chroot echo "en_GB ISO-8859-1" >> /etc/locale.gen
-  run_in_chroot echo "LANG=en_GB.UTF-8" >> /etc/locale.conf
+  echo "en_GB.UTF-8 UTF-8" | run_in_chroot tee -a /etc/locale.gen > /dev/null
+  echo "en_GB ISO-8859-1"  | run_in_chroot tee -a /etc/locale.gen > /dev/null
+  echo "LANG=en_GB.UTF-8"  | run_in_chroot tee -a /etc/locale.conf > /dev/null
 
   run_in_chroot locale-gen
 }
