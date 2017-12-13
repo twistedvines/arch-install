@@ -45,6 +45,7 @@ enable_sshd() {
 }
 
 configure_mirrors() {
+  echo 'Configuring Pacman mirrors...'
   mv /mnt/etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist.all
   sed -i 's/^#Server/Server/g' /mnt/etc/pacman.d/mirrorlist.all
   rankmirrors -n 3 /mnt/etc/pacman.d/mirrorlist.all > /mnt/etc/pacman.d/mirrorlist
@@ -84,6 +85,11 @@ create_vagrant_user() {
   fi
 }
 
+configure_non_minimal() {
+  echo 'Performing non-minimal configuration'
+  configure_mirrors
+}
+
 configure_for_packer_build() {
   gen_fstab
   configure_timezone
@@ -91,8 +97,12 @@ configure_for_packer_build() {
   configure_keyboard
   set_hostname
   enable_dhcpcd
+  if [ -z "$MINIMAL_CONFIGURATION" ]; then
+    configure_non_minimal
+  else
+    echo 'Skipping non-minimal configuration'
+  fi
   enable_sshd
-  configure_mirrors
   set_root_password
   create_nopasswd_group
   create_vagrant_user
@@ -105,7 +115,11 @@ configure_for_other_build() {
   configure_keyboard
   set_hostname
   enable_dhcpcd
-  configure_mirrors
+  if [ -z "$MINIMAL_CONFIGURATION" ]; then
+    configure_non_minimal
+  else
+    echo 'Skipping non-minimal configuration'
+  fi
   set_root_password
   create_nopasswd_group
 }
