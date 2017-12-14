@@ -11,7 +11,7 @@ get_project_dir() {
 init_serverspec() {
   cd "${project_dir}/test"
   vagrant init --force --minimal "$box_name"
-  bundle
+  bundle install --binstubs
 }
 
 project_dir="$(get_project_dir)"
@@ -34,4 +34,5 @@ box_file="${box_files[0]}"
 box_name='packer-archlinux-test'
 vagrant box add --force --name "$box_name" "$box_file"
 init_serverspec
-cd "${project_dir}/test" && rake spec
+cd "${project_dir}/test" && bundle exec "${project_dir}/test/bin/rake" spec \
+  && vagrant destroy -f
