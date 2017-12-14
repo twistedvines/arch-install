@@ -1,0 +1,5 @@
+.bundle
+.cache
+Vagrantfile
+test/bin
+.vagrant
